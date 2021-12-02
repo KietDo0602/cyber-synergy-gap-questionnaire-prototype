@@ -19,7 +19,7 @@ export default class IAMenu extends React.Component {
           </Link>
         </div>
         <div className="button-container">
-          <Link to="/ia1" style={{ textDecoration: 'none' }}> 
+          <Link to="/iaquizpage" style={{ textDecoration: 'none' }}> 
             <Button variant="outlined" endIcon={<Send />}> <h3>Start</h3> </Button>        
           </Link>
         </div>

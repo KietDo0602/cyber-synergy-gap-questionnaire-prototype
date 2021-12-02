@@ -1,33 +1,31 @@
 
 import './Dashboard.css';
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import Pie from './Components/Pie';
 import { Link } from 'react-router-dom';
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import Button from '@mui/material/Button';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 export function Dashboard(props) {
+  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [level, setLevel] = useState(1);
   const [complete, setComplete] = useState(false);
   const [acPercentage, setAcPercentage] = useState(0);
-  const [acCompletePercentage, setAcCompletePercentage] = useState(0);
   const [iaPercentage, setIaPercentage] = useState(0);
   const [mpPercentage, setMpPercentage] = useState(0);
   const [pePercentage, setPePercentage] = useState(0);
   const [scPercentage, setScPercentage] = useState(0);
   const [siPercentage, setSiPercentage] = useState(0);
-  const saved = localStorage.getItem("user");
-  const storedUser = JSON.parse(saved);
-  
+
+
   const retrieveCorrectnessPercentage = async (category, level) => {
     let config = {
       headers: {
-          "x-access-token": storedUser.tokens,
+          "x-access-token": token,
       }
     } 
     const res = await axios.get(`http://localhost:4001/clients/correctness/${category}&${level}`, config);
@@ -37,7 +35,7 @@ export function Dashboard(props) {
   const retrieveCopmpletePercentage = async (category, level) => {
     let config = {
       headers: {
-          "x-access-token": storedUser.tokens,
+          "x-access-token": token,
       }
     } 
     const res = await axios.get(`http://localhost:4001/clients/completion/${category}&${level}`, config);
@@ -46,26 +44,40 @@ export function Dashboard(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const id = storedUser.id;
-      console.log(id);
+      setLoading(false);
       const acPercent = await retrieveCorrectnessPercentage("AC", 1);
-      const acCompletePercent = await retrieveCopmpletePercentage("AC", 1);
       const iaPercent = await retrieveCorrectnessPercentage("IA", 1);
       const mpPercent = await retrieveCorrectnessPercentage("MP", 1);
       const pePercent = await retrieveCorrectnessPercentage("PE", 1);
       const scPercent = await retrieveCorrectnessPercentage("SC", 1);
       const siPercent = await retrieveCorrectnessPercentage("SI", 1);
-      setAcPercentage(acPercent);
-      setAcCompletePercentage(acCompletePercent);
-      setIaPercentage(iaPercent);
-      setMpPercentage(mpPercent);
-      setPePercentage(pePercent);
-      setScPercentage(scPercent);
-      setSiPercentage(siPercent);
-      setLoading(true);
+      const acCompletePercent = await retrieveCopmpletePercentage("AC", 1);
+      const iaCompletePercent = await retrieveCopmpletePercentage("IA", 1);
+      const mpCompletePercent = await retrieveCopmpletePercentage("MP", 1);
+      const peCompletePercent = await retrieveCopmpletePercentage("PE", 1);
+      const scCompletePercent = await retrieveCopmpletePercentage("SC", 1);
+      const siCompletePercent = await retrieveCopmpletePercentage("SI", 1);
+
+      if (complete) {
+        setAcPercentage(acPercent);
+        setIaPercentage(iaPercent);
+        setMpPercentage(mpPercent);
+        setPePercentage(pePercent);
+        setScPercentage(scPercent);
+        setSiPercentage(siPercent);
+        setLoading(true);
+      } else {
+        setAcPercentage(acCompletePercent);
+        setIaPercentage(iaCompletePercent);
+        setMpPercentage(mpCompletePercent);
+        setPePercentage(peCompletePercent);
+        setScPercentage(scCompletePercent);
+        setSiPercentage(siCompletePercent);
+        setLoading(true);
+      }
     }
     fetchMyAPI()
-  }, [])
+  }, [complete])
 
   const GenerateColorFromPercentage = (percentage) => {
     if (percentage < 15) {
@@ -123,7 +135,7 @@ export function Dashboard(props) {
     <div className="pie-container">
       <div className="progress-bar">
         <Link to='/acmenu'>
-          <Pie percentage={!complete ? acPercentage : acCompletePercentage} colour={!complete ? GenerateColorFromPercentage(acPercentage) : GenerateColorFromPercentage(acCompletePercentage)} />
+          <Pie percentage={acPercentage} colour={GenerateColorFromPercentage(acPercentage)} />
         </Link>
         <h1><b> AC </b></h1>
       </div>
@@ -159,15 +171,6 @@ export function Dashboard(props) {
       </div>
     </div>
     }
-    {/* <Link to="/admin">
-      <Button>Go to admin page</Button>
-    </Link>
-    <Link to="/acquizpage">
-      <Button>Go to test ac quiz page</Button>
-    </Link>
-    <Link to="/questionpage">
-      <Button>Test out question Page mapping</Button>
-    </Link> */}
   </>
   );
 }

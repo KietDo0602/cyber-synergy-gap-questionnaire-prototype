@@ -18,7 +18,7 @@ export default class SIMenu extends React.Component {
           </Link>
         </div>
         <div className="button-container">
-          <Link to="/si1" style={{ textDecoration: 'none' }}> 
+          <Link to="/siquizpage" style={{ textDecoration: 'none' }}> 
             <Button variant="outlined" endIcon={<Send />}> <h3> Start </h3> </Button>        
           </Link>
         </div>

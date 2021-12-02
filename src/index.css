@@ -77,8 +77,9 @@ div.infoButton {
 }
 
 .uploadButton {
-  left: 45%;
-  right: 35%;
+  left: 46%;
+  right: 46%;
+  text-align: center;
 }
 
 .login-logo {
@@ -188,4 +189,22 @@ body {
   position: absolute;
   left: 5%;
   top: 10%;
+}
+
+.fileDescription {
+  left: 40%;
+  right: 40%;
+  text-align: center;
+  color: blue;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.2); /* IE */
+  -moz-transform: scale(1.2); /* FF */
+  -webkit-transform: scale(1.2); /* Safari and Chrome */
+  -o-transform: scale(1.2); /* Opera */
+  transform: scale(1.2);
+  padding: 10px;
 }

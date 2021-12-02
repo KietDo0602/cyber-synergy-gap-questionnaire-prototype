@@ -18,7 +18,7 @@ export default class SCMenu extends React.Component {
           </Link>
         </div>
         <div className="button-container">
-          <Link to="/sc1" style={{ textDecoration: 'none' }}> 
+          <Link to="/scquizpage" style={{ textDecoration: 'none' }}> 
             <Button variant="outlined" endIcon={<Send />}> <h3>Start</h3> </Button>        
           </Link>
         </div>

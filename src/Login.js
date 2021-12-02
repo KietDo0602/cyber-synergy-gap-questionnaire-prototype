@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -10,16 +10,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Redirect } from 'react-router-dom';
 import logo from "./resources/images/logo.png";
-import { Link } from 'react-router-dom';
-import {UserContext} from './UserContext';
 import axios from 'axios';
 
 const theme = createTheme();
 
 export default function Login() {
-  const { user, setUser } = useContext(UserContext);
   const [valid, setValid] = useState("");
-
 
   const contains = async (email) => {
     const userLists = await axios.get('http://localhost:4001/users');
@@ -42,15 +38,16 @@ export default function Login() {
     if (id !== null) {
       const login = await axios.post('http://localhost:4001/users/login', loginInfo);
       if (login.status === 200) {
-        setValid("true");
+        console.log(login);
+        localStorage.setItem("token", login.data.token);
         const tokens = login.data.token;
         const refreshTokens = login.data.refreshToken;
         const adminData = await axios.get(`http://localhost:4001/users/id/${id}`);
         const admin = adminData.data.admin;
         const userStorage = {id, email, admin, tokens, refreshTokens};
-        setUser(userStorage);
-        localStorage.clear();
-        localStorage.setItem("user", JSON.stringify(userStorage));
+        const saved = JSON.stringify(userStorage);
+        localStorage.setItem("user", saved);
+        setValid("true");
       } else {
         setValid("false");
       }
@@ -61,7 +58,7 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      { valid === "true" ? (<Redirect push to="/dashboard"/>) : null }
+      {valid === "true" ? <Redirect to="/dashboard"/> : null}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -103,9 +100,11 @@ export default function Login() {
             />
             {valid === "false" ? <h4 className="error"> Invalid username or password. Please try again. </h4> : null}
             {valid === "true" ? <h4 className="success"> Login Successful. </h4> : null}
-            <Button type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
-              Sign In
-            </Button>
+            {/* <Link to='/dashboard'>  */}
+              <Button type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
+                Sign In
+              </Button>
+            {/* </Link> */}
           </Box>
         </Box>
       </Container>

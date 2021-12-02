@@ -10,10 +10,11 @@ function Navbar() {
   const [role, setRole] = useState('');
   const saved = localStorage.getItem("user");
   const user = JSON.parse(saved);
+  const [userData, setuserData] = useState(user);
 
   useEffect(() => {
-    const saved = localStorage.getItem("user");
-    const userData = JSON.parse(saved);
+    // const saved = localStorage.getItem("user");
+    // const userData = JSON.parse(saved);
     async function fetchRole() {
       if (userData !== null) {
         if(userData.admin === -1) {
@@ -32,14 +33,14 @@ function Navbar() {
       }
     }
     fetchRole();
-  }, [role]);
+  }, []);
 
   const showSidebar = () => setSidebar(!sidebar);
   console.log(user);
   
   return (
     <>
-      {user ? 
+      {userData ? 
       <div className='navbar'>
       <div className='navbar'>
       <Link to='#' className='menu-bars'>
@@ -47,12 +48,12 @@ function Navbar() {
       </Link>
       </div>
       <div className='navbar__title navbar__item'></div>
-      <div className='navbar__item'>User: {user.email} </div>   
+      <div className='navbar__item'>User: {userData.email} </div>   
       <div className='navbar__item'>Role: {role} </div> 
       </div>
       : null}
       
-      {user ? 
+      {userData ? 
       <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
         <ul className='nav-menu-items' onClick={showSidebar}>
           <li className='navbar-toggle'>

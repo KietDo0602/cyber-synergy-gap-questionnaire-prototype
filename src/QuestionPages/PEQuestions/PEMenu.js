@@ -18,7 +18,7 @@ export default class PEMenu extends React.Component {
           </Link>
         </div>
         <div className="button-container">
-          <Link to="/pe1" style={{ textDecoration: 'none' }}> 
+          <Link to="/pequizpage" style={{ textDecoration: 'none' }}> 
             <Button variant="outlined" endIcon={<Send />}> <h3>Start</h3> </Button>        
           </Link>
         </div>

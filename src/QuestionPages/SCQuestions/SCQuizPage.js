@@ -6,8 +6,8 @@ import Info from '@mui/icons-material/Info';
 import PopUp from "../../Components/PopUp";
 import { QuestionComponent } from "../../Components/QuestionComponent";
 
-export function IAQuizPage(props) {
-    const SECTION = "IA";
+export function SCQuizPage(props) {
+    const SECTION = "SC";
     const LEVEL = 1;
 
     const [seen, setSeen] = useState(false);
@@ -25,7 +25,7 @@ export function IAQuizPage(props) {
             </div>
             <div className="backgroundDiv">
                 <div className="top">
-                    <h1>Identification and Authentication (IA)</h1>
+                    <h1>System and Communications Protection (SC)</h1>
                 </div>
                 <div className="submit-button-container"> 
                     <Link to="/dashboard" style={{ textDecoration: 'none' }}>
