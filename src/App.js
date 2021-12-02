@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Login from "./Login.js";
+import Register from "./Register.js";
 import ACMenu from "./QuestionPages/ACQuestions/ACMenu.js";
 import {ACQuizPage} from './QuestionPages/ACQuestions/ACQuizPage';
 import IAMenu from "./QuestionPages/IAQuestions/IAMenu.js";
@@ -21,6 +22,7 @@ export function App() {
       <Router>
         <Switch> 
           <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
           <div>
             <SideBar />
             <Route path="/dashboard" component={Dashboard} />

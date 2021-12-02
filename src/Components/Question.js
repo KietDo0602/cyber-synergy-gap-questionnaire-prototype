@@ -76,7 +76,7 @@ export function Question (props) {
             }
         }
         console.log(e);
-        const QT0Answer = {questionId: props.qid, category: props.category, answer: e, weight: weight, questionType: 0};
+        const QT0Answer = {questionId: props.qid, category: props.section, answer: e, weight: weight, questionType: 0};
         const res = await axios.post('http://localhost:4001/clients/answer', QT0Answer, config);
         console.log(res);
     }
@@ -94,7 +94,7 @@ export function Question (props) {
                 weight += props.choices[i].weight;
             }
         }
-        const QT1Answer = {questionId: props.qid, category: props.category, answer: arr, weight: weight, questionType: 1};
+        const QT1Answer = {questionId: props.qid, category: props.section, answer: arr, weight: weight, questionType: 1};
         let config = {
             headers: {
                 "x-access-token": token,
@@ -113,7 +113,7 @@ export function Question (props) {
                 "x-access-token": token,
             }
         }
-        const QT2Answer = {questionId: props.qid, category: props.category, answer: e.target.value, weight: 0, questionType: 2};
+        const QT2Answer = {questionId: props.qid, category: props.section, answer: e.target.value, weight: 0, questionType: 2};
         const res = await axios.post('http://localhost:4001/clients/answer', QT2Answer, config);
         console.log(res);
     }

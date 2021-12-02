@@ -11,9 +11,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 export function Dashboard(props) {
   const token = localStorage.getItem("token");
+  const saved = localStorage.getItem("user");
+  const storedUser = JSON.parse(saved);
+  const admin = storedUser.admin;
   const [loading, setLoading] = useState(false);
   const [level, setLevel] = useState(1);
-  const [complete, setComplete] = useState(false);
+  const [correctness, setCorrectness] = useState(false);
   const [acPercentage, setAcPercentage] = useState(0);
   const [iaPercentage, setIaPercentage] = useState(0);
   const [mpPercentage, setMpPercentage] = useState(0);
@@ -58,7 +61,7 @@ export function Dashboard(props) {
       const scCompletePercent = await retrieveCopmpletePercentage("SC", 1);
       const siCompletePercent = await retrieveCopmpletePercentage("SI", 1);
 
-      if (complete) {
+      if (correctness) {
         setAcPercentage(acPercent);
         setIaPercentage(iaPercent);
         setMpPercentage(mpPercent);
@@ -77,7 +80,7 @@ export function Dashboard(props) {
       }
     }
     fetchMyAPI()
-  }, [complete])
+  }, [correctness])
 
   const GenerateColorFromPercentage = (percentage) => {
     if (percentage < 15) {
@@ -96,81 +99,86 @@ export function Dashboard(props) {
   }
 
   const handleComplete = (e) => {
-    setComplete(!complete);
+    setCorrectness(!correctness);
   }
 
   const handleLevel = (event) => {
     setLevel(event.target.value);
   }
 
-  return (
+return (
+    <div>
+    {admin === -1 ? <h1>Please  get verified by a CMMC Admin.</h1>
+    :
     <>
-    {/* Level Dropdown Menu */}
-    <div className="DropDown">
+      {/* Level Dropdown Menu */}
+      <div className="DropDown">
       <FormControl sx={{ minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-label">Level</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={level}
-          onChange={handleLevel}
-          label="Level"
-        >
+      <InputLabel id="demo-simple-select-label">Level</InputLabel>
+      <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={level}
+      onChange={handleLevel}
+      label="Level"
+      >
           <MenuItem value={1}> 1 </MenuItem>
           <MenuItem value={2}> 2 </MenuItem>
           <MenuItem value={3}> 3 </MenuItem>
         </Select>
       </FormControl>
-    </div>
-    <div className="toggleCompleteness">
-      <FormControlLabel control={<Checkbox checked={complete} onChange={handleComplete}/>} label={<span style={{ fontSize: '1rem', fontWeight: 'bold' }}>{ "Show Completion Mark" }</span>} sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}/>
-    </div>
-    {/* List of progress bars that tracks the progress of each user */}
-    {
-    !loading ? 
-      <div className="top">
+      </div>
+      <div className="toggleCompleteness">
+        <FormControlLabel control={<Checkbox checked={correctness} onChange={handleComplete}/>} label={<span style={{ fontSize: '1rem', fontWeight: 'bold' }}>{ "Show Correctness Mark" }</span>} sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}/>
+      </div>
+      {/* List of progress bars that tracks the progress of each user */}
+      {
+        !loading ? 
+        <div className="top">
         <CircularProgress style={{'color': 'green'}}/>
-      </div>
-    :
-    <div className="pie-container">
-      <div className="progress-bar">
-        <Link to='/acmenu'>
-          <Pie percentage={acPercentage} colour={GenerateColorFromPercentage(acPercentage)} />
-        </Link>
-        <h1><b> AC </b></h1>
-      </div>
-      <div className="progress-bar">
-        <Link to='/iamenu'>
-          <Pie percentage={iaPercentage} colour={GenerateColorFromPercentage(iaPercentage)} />
-        </Link>
-        <h1><b> IA </b></h1>
-      </div>
-      <div className="progress-bar">
-        <Link to='/mpmenu'>
-          <Pie percentage={mpPercentage} colour={GenerateColorFromPercentage(mpPercentage)} />
-        </Link>
-        <h1><b> MP </b></h1>
-      </div>
-      <div className="progress-bar">
-        <Link to='/pemenu'>
-          <Pie percentage={pePercentage} colour={GenerateColorFromPercentage(pePercentage)} />
-        </Link>
-        <h1><b> PE </b></h1>
-      </div>
-      <div className="progress-bar">
-        <Link to='/scmenu'>
-          <Pie percentage={scPercentage} colour={GenerateColorFromPercentage(scPercentage)} />
-        </Link>
-        <h1><b> SC </b></h1>
-      </div>
-      <div className="progress-bar">
-        <Link to='/simenu'>
-          <Pie percentage={siPercentage} colour={GenerateColorFromPercentage(siPercentage)} />
-        </Link>
-        <h1><b> SI </b></h1>
-      </div>
-    </div>
-    }
+        </div>
+        :
+        <div className="pie-container">
+        <div className="progress-bar">
+          <Link to='/acmenu'>
+            <Pie percentage={acPercentage} colour={GenerateColorFromPercentage(acPercentage)} />
+          </Link>
+          <h1><b> AC </b></h1>
+        </div>
+        <div className="progress-bar">
+          <Link to='/iamenu'>
+            <Pie percentage={iaPercentage} colour={GenerateColorFromPercentage(iaPercentage)} />
+          </Link>
+          <h1><b> IA </b></h1>
+        </div>
+        <div className="progress-bar">
+          <Link to='/mpmenu'>
+            <Pie percentage={mpPercentage} colour={GenerateColorFromPercentage(mpPercentage)} />
+          </Link>
+          <h1><b> MP </b></h1>
+        </div>
+        <div className="progress-bar">
+          <Link to='/pemenu'>
+            <Pie percentage={pePercentage} colour={GenerateColorFromPercentage(pePercentage)} />
+          </Link>
+          <h1><b> PE </b></h1>
+        </div>
+        <div className="progress-bar">
+          <Link to='/scmenu'>
+            <Pie percentage={scPercentage} colour={GenerateColorFromPercentage(scPercentage)} />
+          </Link>
+          <h1><b> SC </b></h1>
+        </div>
+        <div className="progress-bar">
+          <Link to='/simenu'>
+            <Pie percentage={siPercentage} colour={GenerateColorFromPercentage(siPercentage)} />
+          </Link>
+          <h1><b> SI </b></h1>
+        </div>
+        </div>
+      }
   </>
+  }
+  </div>
   );
 }

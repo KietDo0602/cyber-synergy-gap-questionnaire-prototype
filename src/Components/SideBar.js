@@ -40,7 +40,7 @@ function Navbar() {
   
   return (
     <>
-      {userData ? 
+      {userData && user.admin !== -1 ? 
       <div className='navbar'>
       <div className='navbar'>
       <Link to='#' className='menu-bars'>
@@ -53,7 +53,7 @@ function Navbar() {
       </div>
       : null}
       
-      {userData ? 
+      {userData && user.admin !== -1 ? 
       <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
         <ul className='nav-menu-items' onClick={showSidebar}>
           <li className='navbar-toggle'>

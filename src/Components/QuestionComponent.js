@@ -1,8 +1,6 @@
 import axios from 'axios';
-import react, {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import {Question} from './Question';
-import { IconButton, Button } from "@mui/material";
-import Send from '@mui/icons-material/Send';
 
 // Retrieve all questions of a section from backend
 // Map through the array of questions and pass in qid
@@ -11,8 +9,6 @@ import Send from '@mui/icons-material/Send';
 // If submitted is true, this will submit this question automatically with the answer inside it
 
 export function QuestionComponent(props) {
-    const saved = localStorage.getItem("user");
-    // const [storedUser, setStoredUser] = JSON.parse(saved);
     const [allQuestions, setAllQuestions] = useState([]);
     let i = 1;
 
@@ -24,7 +20,6 @@ export function QuestionComponent(props) {
         fetchQuestion();
     }, []);
 
-    console.log(allQuestions);
     let QuestionList = allQuestions.map(question => {
         return (
             <div>
