@@ -2,13 +2,11 @@ import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import logo from "./resources/images/logo.png";
 import axios from 'axios';
 
@@ -17,37 +15,20 @@ const theme = createTheme();
 export default function Register() {
   const [valid, setValid] = useState("");
 
-  const contains = async (email, company) => {
-    const userLists = await axios.get('http://localhost:4001/users');
-    const arr = userLists.data;
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].email === email || arr[i].companyName === company) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const companyName = data.get('companyName');
-    const exist = await contains(companyName);
-    if (exist) {
-        setValid("false");
-        return;
-    }
     const fname = data.get('fname');
     const lname = data.get('lname');
     const password = data.get('password');
     const registerInfo = {firstName: fname, lastName: lname, companyName: companyName, email: email, password: password};
-    const res = await axios.post(`http://localhost:4001/users/add`, registerInfo);
-    if (res.status === 201) {
-        setValid("true");
-    } else {
-        setValid("false");
-    }
+    axios.post(`http://localhost:4001/users/add`, registerInfo).then(res => {
+      setValid("true");
+    }).catch(() => {
+      setValid("false");
+    })
   };
 
   return (
@@ -115,18 +96,15 @@ export default function Register() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             {valid === "false" ? <h4 className="error"> Company or Email is already taken. Please try again. </h4> : null}
             {valid === "true" ? <h4 className="success"> Register Successful. </h4> : null}
-            {/* <Link to='/dashboard'>  */}
               <Button type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
                 Sign Up
               </Button>
-            {/* </Link> */}
           </Box>
+          <Link to='/login'> 
+              <h3 className="link">Already have an account? Login now!</h3>
+          </Link>
         </Box>
       </Container>
     </ThemeProvider>

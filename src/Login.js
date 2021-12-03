@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import logo from "./resources/images/logo.png";
 import axios from 'axios';
 
@@ -17,43 +17,36 @@ const theme = createTheme();
 export default function Login() {
   const [valid, setValid] = useState("");
 
-  const contains = async (email) => {
-    const userLists = await axios.get('http://localhost:4001/users');
-    const arr = userLists.data;
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].email === email) {
-        return arr[i]._id;
-      }
-    }
-    return null;
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     const loginInfo = {email, password};
-    const id = await contains(email);
-    if (id !== null) {
+    try {
       const login = await axios.post('http://localhost:4001/users/login', loginInfo);
+      console.log("The status is:" + login.status)
       if (login.status === 200) {
         console.log(login);
         localStorage.setItem("token", login.data.token);
         const tokens = login.data.token;
         const refreshTokens = login.data.refreshToken;
-        const adminData = await axios.get(`http://localhost:4001/users/id/${id}`);
-        const admin = adminData.data.admin;
-        const userStorage = {id, email, admin, tokens, refreshTokens};
+        const admin = login.data.admin;
+        const uid = login.data._id;
+        const userStorage = {uid, email, admin, tokens, refreshTokens};
         const saved = JSON.stringify(userStorage);
         localStorage.setItem("user", saved);
         setValid("true");
-      } else {
-        setValid("false");
+        return;
       }
-    } else {
       setValid("false");
+      return;
+
+    } catch (err) {
+      setValid("false");
+      return;
     }
+      
   };
 
   return (
@@ -100,11 +93,12 @@ export default function Login() {
             />
             {valid === "false" ? <h4 className="error"> Invalid username or password. Please try again. </h4> : null}
             {valid === "true" ? <h4 className="success"> Login Successful. </h4> : null}
-            {/* <Link to='/dashboard'>  */}
               <Button type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
                 Sign In
               </Button>
-            {/* </Link> */}
+              <Link to='/register'> 
+                <h3 className="link">Don't have an account? Create one now!</h3>
+              </Link>
           </Box>
         </Box>
       </Container>

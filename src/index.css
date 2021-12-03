@@ -213,3 +213,12 @@ input[type=checkbox]
   color: green;
   cursor: pointer;
 }
+
+.link {
+  color: blue;
+  text-align: center;
+}
+
+.link:hover {
+  cursor: pointer;
+}
