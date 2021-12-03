@@ -208,3 +208,8 @@ input[type=checkbox]
   transform: scale(1.2);
   padding: 10px;
 }
+
+.navbar__item:hover {
+  color: green;
+  cursor: pointer;
+}

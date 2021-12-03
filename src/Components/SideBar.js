@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import './SideBar.css';
 import MenuIcon from '@mui/icons-material/Menu';
-import axios from 'axios';
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
@@ -11,10 +10,9 @@ function Navbar() {
   const saved = localStorage.getItem("user");
   const user = JSON.parse(saved);
   const [userData, setuserData] = useState(user);
+  const [LoggedOut, setLoggedOut] = useState(false);
 
   useEffect(() => {
-    // const saved = localStorage.getItem("user");
-    // const userData = JSON.parse(saved);
     async function fetchRole() {
       if (userData !== null) {
         if(userData.admin === -1) {
@@ -37,6 +35,12 @@ function Navbar() {
 
   const showSidebar = () => setSidebar(!sidebar);
   console.log(user);
+
+  const LogOut = (e) => {
+    localStorage.removeItem("user");
+    localStorage.clear();
+    window.location.href = "/";
+  }
   
   return (
     <>
@@ -50,6 +54,7 @@ function Navbar() {
       <div className='navbar__title navbar__item'></div>
       <div className='navbar__item'>User: {userData.email} </div>   
       <div className='navbar__item'>Role: {role} </div> 
+      <div className='navbar__item' onClick={LogOut}>Log Out</div> 
       </div>
       : null}
       
